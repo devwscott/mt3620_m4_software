@@ -17,6 +17,10 @@ add_compile_definitions(OSAI_ENABLE_DMA)
 # add_compile_definitions(M4_ENABLE_XIP_FLASH)
 add_link_options(-specs=nano.specs -specs=nosys.specs)
 
+# added the cflags for build freertos based example
+set(CMAKE_C_FLAGS "-std=c11 -fno-common -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall")
+set(CMAKE_CXX_FLAGS "-std=gnu++14 -fno-common -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -Wall")
+
 # Executable
 add_executable(${PROJECT_NAME}
                main.c
