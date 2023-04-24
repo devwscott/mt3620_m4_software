@@ -44,7 +44,8 @@
 /******************************************************************************/
 /* Configurations */
 /******************************************************************************/
-static const UART_PORT uart_port_num = OS_HAL_UART_ISU0;
+// static const UART_PORT uart_port_num = OS_HAL_UART_ISU0;
+static const UART_PORT uart_port_num = OS_HAL_UART_ISU1;
 static const os_hal_gpio_pin gpio_led_red = OS_HAL_GPIO_8;
 static const os_hal_gpio_pin gpio_led_green = OS_HAL_GPIO_9;
 static const os_hal_gpio_pin gpio_button_a = OS_HAL_GPIO_12;
