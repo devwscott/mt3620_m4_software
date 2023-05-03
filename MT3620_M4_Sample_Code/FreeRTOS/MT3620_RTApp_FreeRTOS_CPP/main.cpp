@@ -33,6 +33,9 @@
  * MEDIATEK SOFTWARE AT ISSUE.
  */
 
+#include <cstdio>
+#include <string>
+
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -44,6 +47,9 @@
 
 #include "os_hal_gpio.h"
 #include "os_hal_uart.h"
+
+using namespace std;
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -57,6 +63,8 @@ extern InitFunc __init_array_end;
 #ifdef __cplusplus
 }
 #endif
+
+extern "C" void *__dso_handle = nullptr;
 
 /******************************************************************************/
 /* Configurations */
@@ -95,16 +103,24 @@ class DigitalOut
 {
 private:
 	os_hal_gpio_pin _Pin;
+	string color;
 
 public:
-	DigitalOut(os_hal_gpio_pin pin);
+	DigitalOut(os_hal_gpio_pin pin, string c);
 	void Write(int value);
+	string getColor();
 };
 
-DigitalOut::DigitalOut(os_hal_gpio_pin pin)
+DigitalOut::DigitalOut(os_hal_gpio_pin pin, string c)
 {
 	_Pin = pin;
+	color = c;
 	mtk_os_hal_gpio_set_direction(_Pin, OS_HAL_GPIO_DIR_OUTPUT);
+}
+
+string DigitalOut::getColor()
+{
+	return color;
 }
 
 void DigitalOut::Write(int value)
@@ -117,16 +133,25 @@ void DigitalOut::Write(int value)
 /******************************************************************************/
 static void blink_task(void* pParameters)
 {
-	DigitalOut led(gpio_led_green);
+	// DigitalOut led(gpio_led_green);
+	// DigitalOut* led = new DigitalOut(gpio_led_green);
+	DigitalOut* led = new DigitalOut(gpio_led_green, "green");
+
 
 	printf("Blink Task Started\n");
 
+	printf("out color = %s\n", led->getColor().c_str());
+
+
+
 	while (1)
 	{
-		led.Write(0);
-		vTaskDelay(pdMS_TO_TICKS(100));
-		led.Write(1);
-		vTaskDelay(pdMS_TO_TICKS(100));
+		led->Write(0);
+		// vTaskDelay(pdMS_TO_TICKS(100));
+		vTaskDelay(pdMS_TO_TICKS(2000));
+		led->Write(1);
+		// vTaskDelay(pdMS_TO_TICKS(100));
+		vTaskDelay(pdMS_TO_TICKS(2000));
 	}
 }
 
